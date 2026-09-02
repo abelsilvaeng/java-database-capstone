@@ -7,12 +7,12 @@ some records have — lives in MongoDB.
 
 ## MySQL Database Design
 
-MySQL holds the core operational entities: `patients`, `doctors`, `admin` and `appointment`.
+MySQL holds the core operational entities: `patient`, `doctor`, `admin` and `appointment`.
 These are stable, highly relational, and benefit from foreign keys, uniqueness constraints and
 transactions. An appointment without a valid doctor and patient is meaningless, and the database
 itself should be the thing that guarantees it.
 
-### Table: patients
+### Table: patient
 
 | Column   | Type         | Constraints                       |
 |----------|--------------|-----------------------------------|
@@ -26,7 +26,7 @@ itself should be the thing that guarantees it.
 Email and phone are both unique because the signup flow rejects a patient whose email *or* phone
 already exists. The password is never serialized back to the client.
 
-### Table: doctors
+### Table: doctor
 
 | Column    | Type         | Constraints                    |
 |-----------|--------------|--------------------------------|
@@ -45,7 +45,7 @@ comma-separated string. This is what JPA generates for the `@ElementCollection` 
 
 | Column          | Type        | Constraints                          |
 |-----------------|-------------|--------------------------------------|
-| doctor_id       | BIGINT      | NOT NULL, FOREIGN KEY → doctors(id)  |
+| doctor_id       | BIGINT      | NOT NULL, FOREIGN KEY → doctor(id)  |
 | available_times | VARCHAR(50) | slot in `HH:mm-HH:mm` format         |
 
 Deleting a doctor deletes their slots, since a slot has no meaning on its own.
@@ -55,8 +55,8 @@ Deleting a doctor deletes their slots, since a slot has no meaning on its own.
 | Column           | Type     | Constraints                           |
 |------------------|----------|---------------------------------------|
 | id               | BIGINT   | PRIMARY KEY, AUTO_INCREMENT           |
-| doctor_id        | BIGINT   | NOT NULL, FOREIGN KEY → doctors(id)   |
-| patient_id       | BIGINT   | NOT NULL, FOREIGN KEY → patients(id)  |
+| doctor_id        | BIGINT   | NOT NULL, FOREIGN KEY → doctor(id)   |
+| patient_id       | BIGINT   | NOT NULL, FOREIGN KEY → patient(id)  |
 | appointment_time | DATETIME | NOT NULL, must be in the future       |
 | status           | INT      | NOT NULL — 0 = scheduled, 1 = completed |
 
