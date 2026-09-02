@@ -1,46 +1,34 @@
-// prescriptionServices.js
-import { API_BASE_URL } from '../config/config.js'
+/* prescriptionServices.js - prescriptions live in MongoDB behind /prescription. */
 
-const PRESCRITION_API = API_BASE_URL + "/prescription"
+import { API_BASE_URL } from "../config/config.js";
+
+const PRESCRIPTION_API = `${API_BASE_URL}/prescription`;
+
 export async function savePrescription(prescription, token) {
   try {
-    const response = await fetch(`${PRESCRITION_API}/${token}`, {
+    const response = await fetch(`${PRESCRIPTION_API}/${token}`, {
       method: "POST",
-      headers: {
-        "Content-type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(prescription)
     });
-    const result = await response.json();
-    return { success: response.ok, message: result.message }
-  }
-  catch (error) {
-    console.error("Error :: savePrescription :: ", error)
-    return { success: false, message: result.message }
+    const data = await response.json();
+    return { success: response.ok, message: data.message };
+  } catch (error) {
+    console.error("Failed to save prescription:", error);
+    return { success: false, message: "Something went wrong while saving the prescription." };
   }
 }
 
 export async function getPrescription(appointmentId, token) {
   try {
-    const response = await fetch(`${PRESCRITION_API}/${appointmentId}/${token}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-
+    const response = await fetch(`${PRESCRIPTION_API}/${appointmentId}/${token}`);
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Failed to fetch prescription:", errorData);
-      throw new Error(errorData.message || "Unable to fetch prescription");
+      return null;
     }
-
-    const result = await response.json();
-    console.log(result)
-    console.log(result)
-    return result; // This should be your prescription object
+    const data = await response.json();
+    return data.prescription || null;
   } catch (error) {
-    console.error("Error :: getPrescription ::", error);
-    throw error;
+    console.error("Failed to load prescription:", error);
+    return null;
   }
 }

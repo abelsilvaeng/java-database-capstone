@@ -1,28 +1,28 @@
-// render.js
-
-function selectRole(role) {
-  setRole(role);
-  const token = localStorage.getItem('token');
-  if (role === "admin") {
-    if (token) {
-      window.location.href = `/adminDashboard/${token}`;
-    }
-  } if (role === "patient") {
-    window.location.href = "/pages/patientDashboard.html";
-  } else if (role === "doctor") {
-    if (token) {
-      window.location.href = `/doctorDashboard/${token}`;
-    } else if (role === "loggedPatient") {
-      window.location.href = "loggedPatientDashboard.html";
-    }
-  }
-}
-
+/* render.js - page bootstrap and role routing. */
 
 function renderContent() {
-  const role = getRole();
-  if (!role) {
-    window.location.href = "/"; // if no role, send to role selection page
-    return;
+  if (typeof renderHeader === "function") renderHeader();
+  if (typeof renderFooter === "function") renderFooter();
+}
+
+/**
+ * Sends the user to the right landing page for a role. Admin and doctor need a
+ * token in the URL because their dashboards are server-rendered and validate it.
+ */
+function selectRole(role) {
+  const token = localStorage.getItem("token");
+  localStorage.setItem("userRole", role);
+
+  if (role === "admin" && token) {
+    window.location.href = `/adminDashboard/${token}`;
+  } else if (role === "doctor" && token) {
+    window.location.href = `/doctorDashboard/${token}`;
+  } else if (role === "loggedPatient" && token) {
+    window.location.href = "/pages/loggedPatientDashboard.html";
+  } else if (role === "patient") {
+    window.location.href = "/pages/patientDashboard.html";
   }
 }
+
+window.renderContent = renderContent;
+window.selectRole = selectRole;

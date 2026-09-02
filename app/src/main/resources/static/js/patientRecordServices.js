@@ -1,48 +1,41 @@
-// patientRecordServices.js
-import { getPatientAppointments } from "./services/patientServices.js";
-import { createPatientRecordRow } from './components/patientRecordRow.js';
+/* patientRecordServices.js - a patient's history joined with the prescription for each visit. */
 
-const tableBody = document.getElementById("patientTableBody");
-const token = localStorage.getItem("token");
+import { getPatientData, filterAppointments } from "./services/patientServices.js";
+import { getPrescription } from "./services/prescriptionServices.js";
+import { createPatientRecordRow } from "./components/patientRecordRow.js";
 
-const urlParams = new URLSearchParams(window.location.search);
-const patientId = urlParams.get("id");
-const doctorId = urlParams.get("doctorId");
+export async function loadPatientRecord() {
+  const tableBody = document.getElementById("patientTableBody");
+  if (!tableBody) return;
 
-document.addEventListener("DOMContentLoaded", initializePage);
-
-async function initializePage() {
-  try {
-    if (!token) throw new Error("No token found");
-
-    const appointmentData = await getPatientAppointments(patientId, token, "doctor") || [];
-
-    // Filter by both patientId and doctorId
-    const filteredAppointments = appointmentData.filter(app =>
-      app.doctorId == doctorId);
-    console.log(filteredAppointments)
-    renderAppointments(filteredAppointments);
-  } catch (error) {
-    console.error("Error loading appointments:", error);
-    alert("❌ Failed to load your appointments.");
-  }
-}
-
-function renderAppointments(appointments) {
-  tableBody.innerHTML = "";
-
-  const actionTh = document.querySelector("#patientTable thead tr th:last-child");
-  if (actionTh) {
-    actionTh.style.display = "table-cell"; // Always show "Actions" column
-  }
-
-  if (!appointments.length) {
-    tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No Appointments Found</td></tr>`;
+  const token = localStorage.getItem("token");
+  const patient = await getPatientData(token);
+  if (!patient) {
+    alert("Your session expired. Please log in again.");
+    window.location.href = "/pages/patientDashboard.html";
     return;
   }
 
-  appointments.forEach(appointment => {
-    const row = createPatientRecordRow(appointment);
+  const nameHeading = document.getElementById("patientName");
+  if (nameHeading) nameHeading.textContent = patient.name;
+
+  const data = await filterAppointments("past", "", token);
+  const appointments = data.appointments || [];
+
+  tableBody.innerHTML = "";
+  if (appointments.length === 0) {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td colspan="7" class="noPatientRecord">No past visits recorded yet.</td>`;
     tableBody.appendChild(row);
-  });
+    return;
+  }
+
+  for (const appointment of appointments) {
+    const prescription = await getPrescription(appointment.id, token);
+    tableBody.appendChild(createPatientRecordRow(appointment, prescription));
+  }
 }
+
+document.addEventListener("DOMContentLoaded", loadPatientRecord);
+
+window.loadPatientRecord = loadPatientRecord;

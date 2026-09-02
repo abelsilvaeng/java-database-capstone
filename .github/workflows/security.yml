@@ -1,0 +1,53 @@
+name: Security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly, so newly disclosed CVEs in pinned dependencies still surface.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  dependencies:
+    name: Scan dependencies and files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Run Trivy against the repository
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          severity: CRITICAL
+          exit-code: "1"
+          ignore-unfixed: true
+
+  secrets:
+    name: Check for committed secrets
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      # The application reads its secrets from the environment, so anything that
+      # looks like a real credential in the tracked source is a mistake.
+      - name: Look for hardcoded credentials
+        run: |
+          set -e
+          pattern='(AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|gh[pousr]_[A-Za-z0-9]{36,})'
+          if git grep -nEI "$pattern" -- . ':!*.md'; then
+            echo "::error::Possible credential committed to the repository."
+            exit 1
+          fi
+          echo "No credential patterns found."

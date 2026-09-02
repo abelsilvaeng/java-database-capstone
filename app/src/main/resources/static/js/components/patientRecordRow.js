@@ -1,17 +1,19 @@
-// patientRecordRow.js
-export function createPatientRecordRow(patient) {
-  const tr = document.createElement("tr");
-  tr.innerHTML = `
-      <td class="patient-id">${patient.appointmentDate}</td>
-      <td>${patient.id}</td>
-      <td>${patient.patientId}</td>
-      <td><img src="../assets/images/addPrescriptionIcon/addPrescription.png" alt="addPrescriptionIcon" class="prescription-btn" data-id="${patient.id}"></img></td>
-    `;
+/* patientRecordRow.js - one row of a patient's clinical record, prescription included. */
 
-  // Attach event listeners
-  tr.querySelector(".prescription-btn").addEventListener("click", () => {
-    window.location.href = `/pages/addPrescription.html?mode=view&appointmentId=${patient.id}`;
-  });
+export function createPatientRecordRow(appointment, prescription) {
+  const row = document.createElement("tr");
+  const entry = Array.isArray(prescription) ? prescription[0] : prescription;
 
-  return tr;
+  row.innerHTML = `
+    <td>${appointment.id}</td>
+    <td>${formatDate(appointment.appointmentTime)}</td>
+    <td>${formatTime(appointment.appointmentTime)}</td>
+    <td>${appointment.doctorName ?? ""}</td>
+    <td>${entry ? entry.medication : "-"}</td>
+    <td>${entry ? entry.dosage : "-"}</td>
+    <td>${entry && entry.doctorNotes ? entry.doctorNotes : "-"}</td>`;
+
+  return row;
 }
+
+window.createPatientRecordRow = createPatientRecordRow;

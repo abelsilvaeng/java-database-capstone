@@ -1,19 +1,35 @@
-// appointmentRow.js
-export function getAppointments(appointment) {
-  const tr = document.createElement("tr");
+/* appointmentRow.js - one row of the patient's own appointment list. */
 
-  tr.innerHTML = `
-      <td class="patient-id">${appointment.patientName}</td>
-      <td>${appointment.doctorName}</td>
-      <td>${appointment.date}</td>
-      <td>${appointment.time}</td>
-      <td><img src="../assets/images/edit/edit.png" alt="action" class="prescription-btn" data-id="${appointment.id}"></img></td>
-    `;
+export function createAppointmentRow(appointment) {
+  const row = document.createElement("tr");
+  const isUpcoming = appointment.status === 0;
 
-  // Attach event listeners
-  tr.querySelector(".prescription-btn").addEventListener("click", () => {
-    window.location.href = `addPrescription.html?id=${patient.id}`;
-  });
+  row.innerHTML = `
+    <td>${appointment.id}</td>
+    <td>${appointment.doctorName ?? ""}</td>
+    <td>${formatDate(appointment.appointmentTime)}</td>
+    <td>${formatTime(appointment.appointmentTime)}</td>
+    <td>${isUpcoming ? "Scheduled" : "Completed"}</td>
+    <td class="card-actions"></td>`;
 
-  return tr;
+  const actions = row.querySelector(".card-actions");
+
+  if (isUpcoming) {
+    const editBtn = document.createElement("img");
+    editBtn.src = "/assets/images/edit/edit.png";
+    editBtn.alt = "Edit appointment";
+    editBtn.className = "prescription-btn";
+    editBtn.addEventListener("click", () => {
+      window.location.href =
+        `/pages/updateAppointment.html?appointmentId=${appointment.id}` +
+        `&doctorId=${appointment.doctorId}&patientId=${appointment.patientId}`;
+    });
+    actions.appendChild(editBtn);
+  } else {
+    actions.textContent = "-";
+  }
+
+  return row;
 }
+
+window.createAppointmentRow = createAppointmentRow;

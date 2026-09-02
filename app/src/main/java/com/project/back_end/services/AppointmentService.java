@@ -46,11 +46,25 @@ public class AppointmentService {
     @Transactional
     public int bookAppointment(Appointment appointment) {
         try {
+            resolveReferences(appointment);
             appointmentRepository.save(appointment);
             return 1;
         } catch (Exception e) {
             logger.error("Error booking appointment", e);
             return 0;
+        }
+    }
+
+    /**
+     * The client sends the doctor and patient as bare ids, so replace those stubs with
+     * the managed entities before the appointment is persisted.
+     */
+    private void resolveReferences(Appointment appointment) {
+        if (appointment.getDoctor() != null && appointment.getDoctor().getId() != null) {
+            doctorRepository.findById(appointment.getDoctor().getId()).ifPresent(appointment::setDoctor);
+        }
+        if (appointment.getPatient() != null && appointment.getPatient().getId() != null) {
+            patientRepository.findById(appointment.getPatient().getId()).ifPresent(appointment::setPatient);
         }
     }
 
@@ -74,6 +88,7 @@ public class AppointmentService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
+        resolveReferences(appointment);
         stored.setAppointmentTime(appointment.getAppointmentTime());
         stored.setDoctor(appointment.getDoctor());
         appointmentRepository.save(stored);

@@ -1,0 +1,59 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: smartclinic-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:-root}
+      MYSQL_DATABASE: cms
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      # Everything in docker-entrypoint-initdb.d runs once, in file order,
+      # the first time the data volume is created.
+      - ./SQL/cms.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./SQL/insert-sample-data.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
+      - ./SQL/stored-procedures.sql:/docker-entrypoint-initdb.d/03-procedures.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_PASSWORD:-root}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  mongodb:
+    image: mongo:7
+    container_name: smartclinic-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+      - ./prescriptions/load-prescriptions.js:/docker-entrypoint-initdb.d/01-prescriptions.js:ro
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: ./app
+    container_name: smartclinic-app
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: "3306"
+      MYSQL_DB: cms
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-root}
+      MONGO_URI: mongodb://mongodb:27017/prescriptions
+      JWT_SECRET: ${JWT_SECRET:-2f7b1d9c4a6e8035bd12ce47a09f6381d5c2be74a9130fe6852c47db903a1f6c}
+    ports:
+      - "8080:8080"
+
+volumes:
+  mysql-data:
+  mongo-data:

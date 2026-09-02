@@ -1,0 +1,61 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  javascript:
+    name: Lint JavaScript
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run ESLint
+        run: npx --yes eslint@9 "app/src/main/resources/static/js/**/*.js"
+
+  java:
+    name: Check Java style
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: temurin
+          cache: maven
+
+      # Compilation warnings are the hard gate; the Checkstyle report is
+      # published as an artifact for review rather than failing the build.
+      - name: Compile
+        working-directory: app
+        run: ./mvnw -B clean compile
+
+      - name: Generate Checkstyle report
+        working-directory: app
+        run: >-
+          ./mvnw -B org.apache.maven.plugins:maven-checkstyle-plugin:3.6.0:checkstyle
+          -Dcheckstyle.config.location=google_checks.xml
+        continue-on-error: true
+
+      - name: Upload Checkstyle report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: checkstyle-report
+          path: app/target/site/
+          if-no-files-found: ignore
