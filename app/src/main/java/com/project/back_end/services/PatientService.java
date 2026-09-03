@@ -91,7 +91,7 @@ public class PatientService {
     public ResponseEntity<Map<String, Object>> getPatientAppointment(Long id, String token) {
         Map<String, Object> response = new HashMap<>();
         try {
-            String email = tokenService.extractEmail(token);
+            String email = tokenService.extractIdentifier(token);
             Patient patient = patientRepository.findByEmail(email);
             if (patient == null || !patient.getId().equals(id)) {
                 response.put("message", "Unauthorized access");
@@ -177,7 +177,7 @@ public class PatientService {
     public ResponseEntity<Map<String, Object>> getPatientDetails(String token) {
         Map<String, Object> response = new HashMap<>();
         try {
-            String email = tokenService.extractEmail(token);
+            String email = tokenService.extractIdentifier(token);
             Patient patient = patientRepository.findByEmail(email);
             if (patient == null) {
                 response.put("message", "Patient not found");

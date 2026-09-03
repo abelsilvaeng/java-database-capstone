@@ -49,7 +49,7 @@ public class TokenService {
                 .compact();
     }
 
-    public String extractEmail(String token) {
+    public String extractIdentifier(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
@@ -64,7 +64,7 @@ public class TokenService {
      */
     public boolean validateToken(String token, String user) {
         try {
-            String identifier = extractEmail(token);
+            String identifier = extractIdentifier(token);
             if (identifier == null) {
                 return false;
             }

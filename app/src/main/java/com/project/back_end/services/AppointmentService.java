@@ -105,7 +105,7 @@ public class AppointmentService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
-        String email = tokenService.extractEmail(token);
+        String email = tokenService.extractIdentifier(token);
         Patient patient = patientRepository.findByEmail(email);
         if (patient == null || !existing.get().getPatient().getId().equals(patient.getId())) {
             response.put("message", "You are not allowed to cancel this appointment");
@@ -120,7 +120,7 @@ public class AppointmentService {
     @Transactional
     public Map<String, Object> getAppointment(String patientName, LocalDate date, String token) {
         Map<String, Object> response = new HashMap<>();
-        String email = tokenService.extractEmail(token);
+        String email = tokenService.extractIdentifier(token);
         var doctor = doctorRepository.findByEmail(email);
         if (doctor == null) {
             response.put("appointments", new ArrayList<>());

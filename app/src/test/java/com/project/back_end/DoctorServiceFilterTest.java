@@ -59,6 +59,29 @@ class DoctorServiceFilterTest {
     }
 
     @Test
+    void anExplicitSlotIsMatchedDirectly() {
+        // The lab's own curl passes a slot, not AM/PM:
+        //   GET /doctor/filter/null/09:00-10:00/Cardiologist
+        List<Doctor> doctors = Arrays.asList(
+                doctorWithSlots("Has The Slot", "09:00-10:00", "14:00-15:00"),
+                doctorWithSlots("Different Slots", "11:00-12:00"));
+
+        List<Doctor> filtered = doctorService.filterDoctorByTime(doctors, "09:00-10:00");
+
+        assertEquals(1, filtered.size());
+        assertEquals("Has The Slot", filtered.get(0).getName());
+    }
+
+    @Test
+    void theLiteralStringNullMeansNoTimeFilter() {
+        List<Doctor> doctors = Arrays.asList(
+                doctorWithSlots("Morning", "09:00-10:00"),
+                doctorWithSlots("Afternoon", "14:00-15:00"));
+
+        assertEquals(2, doctorService.filterDoctorByTime(doctors, "null").size());
+    }
+
+    @Test
     void doctorWithoutSlotsIsNeverReturned() {
         List<Doctor> doctors = Arrays.asList(doctorWithSlots("No Slots"));
         assertTrue(doctorService.filterDoctorByTime(doctors, "AM").isEmpty());

@@ -146,7 +146,7 @@ public class Service {
     public ResponseEntity<Map<String, String>> validatePatientLogin(Login login) {
         Map<String, String> response = new HashMap<>();
         try {
-            Patient patient = patientRepository.findByEmail(login.getEmail());
+            Patient patient = patientRepository.findByEmail(login.getIdentifier());
             if (patient == null || !patient.getPassword().equals(login.getPassword())) {
                 response.put("message", "Invalid credentials");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
@@ -163,7 +163,7 @@ public class Service {
     public ResponseEntity<Map<String, Object>> filterPatient(String condition, String name, String token) {
         Map<String, Object> response = new HashMap<>();
         try {
-            String email = tokenService.extractEmail(token);
+            String email = tokenService.extractIdentifier(token);
             Patient patient = patientRepository.findByEmail(email);
             if (patient == null) {
                 response.put("message", "Patient not found");

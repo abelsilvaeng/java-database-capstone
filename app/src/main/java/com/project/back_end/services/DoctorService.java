@@ -123,7 +123,7 @@ public class DoctorService {
     public ResponseEntity<Map<String, String>> validateDoctor(Login login) {
         Map<String, String> response = new HashMap<>();
         try {
-            Doctor doctor = doctorRepository.findByEmail(login.getEmail());
+            Doctor doctor = doctorRepository.findByEmail(login.getIdentifier());
             if (doctor == null || !doctor.getPassword().equals(login.getPassword())) {
                 response.put("message", "Invalid credentials");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
@@ -170,16 +170,25 @@ public class DoctorService {
         return filtered;
     }
 
-    private boolean matchesPeriod(String slot, String amOrPm) {
-        if (amOrPm == null || amOrPm.isBlank()) {
+    /**
+     * The time filter arrives in two shapes. The dashboards send "AM" or "PM", and
+     * a direct API call may send an explicit slot such as "09:00-10:00". Both are
+     * accepted: anything that is not AM or PM is matched against the slot itself.
+     */
+    private boolean matchesPeriod(String slot, String filter) {
+        if (filter == null || filter.isBlank() || "null".equalsIgnoreCase(filter)) {
             return true;
         }
-        try {
-            int hour = Integer.parseInt(slotStart(slot).split(":")[0]);
-            return "AM".equalsIgnoreCase(amOrPm) ? hour < 12 : hour >= 12;
-        } catch (Exception e) {
-            return false;
+        if ("AM".equalsIgnoreCase(filter) || "PM".equalsIgnoreCase(filter)) {
+            try {
+                int hour = Integer.parseInt(slotStart(slot).split(":")[0]);
+                return "AM".equalsIgnoreCase(filter) ? hour < 12 : hour >= 12;
+            } catch (Exception e) {
+                return false;
+            }
         }
+        return slot.trim().equalsIgnoreCase(filter.trim())
+                || slotStart(slot).equalsIgnoreCase(slotStart(filter));
     }
 
     @Transactional
