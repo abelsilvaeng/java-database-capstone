@@ -8,7 +8,10 @@ const DOCTOR_API = `${API_BASE_URL}/doctor/login`;
 
 window.openModal = openModal;
 
-window.onload = function () {
+// Registered as a listener rather than assigning window.onload: the page also
+// declares <body onload="renderContent()">, and assigning window.onload would
+// silently replace that handler, leaving the header unrendered.
+window.addEventListener("load", function () {
   const adminBtn = document.getElementById("adminLogin");
   const doctorBtn = document.getElementById("doctorLogin");
   const patientBtn = document.getElementById("patientLogin");
@@ -16,7 +19,7 @@ window.onload = function () {
   if (adminBtn) adminBtn.addEventListener("click", () => openModal("adminLogin"));
   if (doctorBtn) doctorBtn.addEventListener("click", () => openModal("doctorLogin"));
   if (patientBtn) patientBtn.addEventListener("click", () => selectRole("patient"));
-};
+});
 
 window.adminLoginHandler = async function () {
   const username = document.getElementById("username").value.trim();
