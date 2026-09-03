@@ -14,7 +14,7 @@ db.prescriptions.drop();
 db.prescriptions.insertMany([
   {
     patientName: "Maria Silva",
-    appointmentId: NumberLong(1),
+    appointmentId: NumberLong("1"),
     medication: "Atenolol",
     dosage: "50mg",
     doctorNotes: "One tablet each morning. Return in 30 days for a blood pressure check.",
@@ -25,7 +25,7 @@ db.prescriptions.insertMany([
   },
   {
     patientName: "Joao Pereira",
-    appointmentId: NumberLong(2),
+    appointmentId: NumberLong("2"),
     medication: "Hydrocortisone cream",
     dosage: "1% cream",
     doctorNotes: "Apply a thin layer twice a day for 10 days. Stop if irritation appears.",
@@ -34,7 +34,7 @@ db.prescriptions.insertMany([
   },
   {
     patientName: "Ana Costa",
-    appointmentId: NumberLong(3),
+    appointmentId: NumberLong("3"),
     medication: "Amoxicillin",
     dosage: "250mg/5ml suspension",
     doctorNotes: "5ml every 8 hours for 7 days. Complete the full course.",
@@ -45,7 +45,7 @@ db.prescriptions.insertMany([
   },
   {
     patientName: "Pedro Santos",
-    appointmentId: NumberLong(4),
+    appointmentId: NumberLong("4"),
     medication: "Losartan",
     dosage: "50mg",
     doctorNotes: "One tablet daily. Bring the home blood pressure log to the next visit.",
@@ -54,7 +54,7 @@ db.prescriptions.insertMany([
   },
   {
     patientName: "Luiza Fernandes",
-    appointmentId: NumberLong(5),
+    appointmentId: NumberLong("5"),
     medication: "Sumatriptan",
     dosage: "50mg",
     doctorNotes: "Take at the onset of a migraine. No more than two doses in 24 hours.",
@@ -63,7 +63,7 @@ db.prescriptions.insertMany([
   },
   {
     patientName: "Rafael Lima",
-    appointmentId: NumberLong(6),
+    appointmentId: NumberLong("6"),
     medication: "Ibuprofen",
     dosage: "600mg",
     doctorNotes: "One tablet every 8 hours with food, for up to 5 days.",
