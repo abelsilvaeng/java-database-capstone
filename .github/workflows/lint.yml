@@ -43,12 +43,17 @@ jobs:
       # published as an artifact for review rather than failing the build.
       - name: Compile
         working-directory: app
-        run: ./mvnw -B clean compile
+        run: |
+          if command -v mvn >/dev/null 2>&1; then
+            mvn -B clean compile
+          else
+            ./mvnw -B clean compile
+          fi
 
       - name: Generate Checkstyle report
         working-directory: app
         run: >-
-          ./mvnw -B org.apache.maven.plugins:maven-checkstyle-plugin:3.6.0:checkstyle
+          mvn -B org.apache.maven.plugins:maven-checkstyle-plugin:3.6.0:checkstyle
           -Dcheckstyle.config.location=google_checks.xml
         continue-on-error: true
 

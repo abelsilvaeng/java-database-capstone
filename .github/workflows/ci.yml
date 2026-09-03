@@ -69,9 +69,16 @@ jobs:
           mysql -h 127.0.0.1 -P 3306 -uroot -proot cms \
             -e "CALL get_monthly_appointment_report_by_doctor(NULL);"
 
+      # The runner image already ships Maven. Prefer it over the wrapper so the build
+      # does not depend on downloading a Maven distribution on every run.
       - name: Build and run tests
         working-directory: app
-        run: ./mvnw -B verify
+        run: |
+          if command -v mvn >/dev/null 2>&1; then
+            mvn -B verify
+          else
+            ./mvnw -B verify
+          fi
 
       - name: Upload test reports
         if: always()
