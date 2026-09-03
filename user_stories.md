@@ -363,3 +363,55 @@ written record of what was prescribed._
 **Story Points:** 5
 **Notes:**
 - Prescriptions are documents rather than rows because their shape varies between cases.
+
+---
+
+**Title:**
+_As a doctor, I want to mark my unavailability, so that patients are only shown the slots I can
+actually attend._
+
+**Acceptance Criteria:**
+1. A doctor can remove a published slot from their profile, or block a slot for a given date.
+2. Once a slot is marked unavailable, it stops appearing in
+   `GET /doctor/availability/{user}/{doctorId}/{date}/{token}`.
+3. A booking request for a slot that was marked unavailable is rejected with HTTP 400.
+
+**Priority:** High
+**Story Points:** 5
+**Notes:**
+- Unavailability is the mirror of availability: the API returns published slots minus booked
+  ones, so removing a slot from `availableTimes` immediately hides it from patients.
+
+---
+
+**Title:**
+_As a doctor, I want to update my profile with my specialization and contact information, so that
+patients always see up-to-date details._
+
+**Acceptance Criteria:**
+1. The profile form lets the doctor change name, specialty, email, phone and available times.
+2. Saving calls `PUT /doctor/{token}` and the updated details appear in `GET /doctor` right away.
+3. Updating a doctor id that does not exist returns HTTP 404, and invalid values (phone not 10
+   digits, malformed email, specialty shorter than 3 characters) return HTTP 400.
+
+**Priority:** Medium
+**Story Points:** 3
+**Notes:**
+- The same validation rules that apply when an admin creates a doctor apply to updates.
+
+---
+
+**Title:**
+_As a doctor, I want to view the patient details for my upcoming appointments, so that I can be
+prepared before each consultation._
+
+**Acceptance Criteria:**
+1. Each appointment row on the doctor dashboard shows the patient id, name, phone and email.
+2. The details come from `GET /appointments/{date}/{patientName}/{token}` and are limited to the
+   appointments belonging to the doctor the token identifies.
+3. A doctor cannot see the details of a patient who has no appointment with them.
+
+**Priority:** High
+**Story Points:** 3
+**Notes:**
+- Patient passwords are never serialized, so they cannot leak through this view.
