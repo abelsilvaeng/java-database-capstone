@@ -35,11 +35,11 @@ CREATE TABLE patient (
     name     VARCHAR(100) NOT NULL,
     email    VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    phone    VARCHAR(10)  NOT NULL,
+    phone    VARCHAR(20)  NOT NULL,
     address  VARCHAR(255) NOT NULL,
     -- Optional profile details, nullable by design.
     date_of_birth      DATE         NULL,
-    emergency_contact  VARCHAR(10)  NULL,
+    emergency_contact  VARCHAR(20)  NULL,
     insurance_provider VARCHAR(100) NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uq_patient_email (email),
@@ -55,7 +55,7 @@ CREATE TABLE doctor (
     specialty VARCHAR(50)  NOT NULL,
     email     VARCHAR(255) NOT NULL,
     password  VARCHAR(255) NOT NULL,
-    phone     VARCHAR(10)  NOT NULL,
+    phone     VARCHAR(20)  NOT NULL,
     -- Optional profile details, nullable by design.
     years_of_experience INT          NULL,
     clinic_address      VARCHAR(255) NULL,

@@ -1,75 +1,93 @@
-// Seeds the prescriptions collection in MongoDB.
+// Seeds the prescriptions collection in MongoDB with the dataset from the
+// "Adding Databases and Tables" lab: 24 prescriptions tied to appointments 51-74.
 //
-//   mongosh "mongodb://root:<password>@localhost:27017/prescriptions?authSource=admin" \
+//   mongosh "mongodb://root:<password>@<host>:27017/prescriptions?authSource=admin" \
 //     prescriptions/load-prescriptions.js
 //
-// Or, from a shell with the JSON file at hand:
-//   mongoimport --uri "mongodb://root:<password>@localhost:27017/prescriptions?authSource=admin" \
-//     --collection prescriptions --jsonArray --file prescriptions/prescriptions.json
+// The _class field is what Spring Data MongoDB writes to record the Java type,
+// so seeding it here keeps hand-loaded documents identical to ones the
+// application itself would save.
 
 db = db.getSiblingDB("prescriptions");
 
 db.prescriptions.drop();
 
 db.prescriptions.insertMany([
-  {
-    patientName: "Maria Silva",
-    appointmentId: NumberLong("1"),
-    medication: "Atenolol",
-    dosage: "50mg",
-    doctorNotes: "One tablet each morning. Return in 30 days for a blood pressure check.",
-    refillCount: 2,
-    pharmacyName: "Downtown Pharmacy",
-    pharmacy: { name: "Downtown Pharmacy", location: "742 Evergreen Ave" },
-    tags: ["cardiology", "oral"]
-  },
-  {
-    patientName: "Joao Pereira",
-    appointmentId: NumberLong("2"),
-    medication: "Hydrocortisone cream",
-    dosage: "1% cream",
-    doctorNotes: "Apply a thin layer twice a day for 10 days. Stop if irritation appears.",
-    refillCount: 0,
-    tags: ["dermatology", "topical"]
-  },
-  {
-    patientName: "Ana Costa",
-    appointmentId: NumberLong("3"),
-    medication: "Amoxicillin",
-    dosage: "250mg/5ml suspension",
-    doctorNotes: "5ml every 8 hours for 7 days. Complete the full course.",
-    refillCount: 0,
-    pharmacyName: "Riverside Drugstore",
-    pharmacy: { name: "Riverside Drugstore", location: "88 Maple Street" },
-    tags: ["pediatrics", "antibiotic"]
-  },
-  {
-    patientName: "Pedro Santos",
-    appointmentId: NumberLong("4"),
-    medication: "Losartan",
-    dosage: "50mg",
-    doctorNotes: "One tablet daily. Bring the home blood pressure log to the next visit.",
-    refillCount: 3,
-    tags: ["cardiology", "oral"]
-  },
-  {
-    patientName: "Luiza Fernandes",
-    appointmentId: NumberLong("5"),
-    medication: "Sumatriptan",
-    dosage: "50mg",
-    doctorNotes: "Take at the onset of a migraine. No more than two doses in 24 hours.",
-    refillCount: 1,
-    tags: ["neurology", "as-needed"]
-  },
-  {
-    patientName: "Rafael Lima",
-    appointmentId: NumberLong("6"),
-    medication: "Ibuprofen",
-    dosage: "600mg",
-    doctorNotes: "One tablet every 8 hours with food, for up to 5 days.",
-    refillCount: 0,
-    tags: ["orthopedics", "anti-inflammatory"]
-  }
+  { _id: ObjectId("6807dd712725f013281e7201"), patientName: "John Smith", appointmentId: 51,
+    medication: "Paracetamol", dosage: "500mg", doctorNotes: "Take 1 tablet every 6 hours.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7202"), patientName: "Emily Rose", appointmentId: 52,
+    medication: "Aspirin", dosage: "300mg", doctorNotes: "Take 1 tablet after meals.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7203"), patientName: "Michael Jordan", appointmentId: 53,
+    medication: "Ibuprofen", dosage: "400mg", doctorNotes: "Take 1 tablet every 8 hours.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7204"), patientName: "Olivia Moon", appointmentId: 54,
+    medication: "Antihistamine", dosage: "10mg", doctorNotes: "Take 1 tablet daily before bed.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7205"), patientName: "Liam King", appointmentId: 55,
+    medication: "Vitamin C", dosage: "1000mg", doctorNotes: "Take 1 tablet daily.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7206"), patientName: "Sophia Lane", appointmentId: 56,
+    medication: "Antibiotics", dosage: "500mg", doctorNotes: "Take 1 tablet every 12 hours.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7207"), patientName: "Noah Brooks", appointmentId: 57,
+    medication: "Paracetamol", dosage: "500mg", doctorNotes: "Take 1 tablet every 6 hours.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7208"), patientName: "Ava Daniels", appointmentId: 58,
+    medication: "Ibuprofen", dosage: "200mg", doctorNotes: "Take 1 tablet every 8 hours.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7209"), patientName: "William Harris", appointmentId: 59,
+    medication: "Aspirin", dosage: "300mg", doctorNotes: "Take 1 tablet after meals.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7210"), patientName: "Mia Green", appointmentId: 60,
+    medication: "Vitamin D", dosage: "1000 IU", doctorNotes: "Take 1 tablet daily with food.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7211"), patientName: "James Brown", appointmentId: 61,
+    medication: "Antihistamine", dosage: "10mg", doctorNotes: "Take 1 tablet every morning.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7212"), patientName: "Amelia Clark", appointmentId: 62,
+    medication: "Paracetamol", dosage: "500mg", doctorNotes: "Take 1 tablet every 6 hours.",
+    _class: "com.project.back_end.models.Prescription" }
+]);
+
+db.prescriptions.insertMany([
+  { _id: ObjectId("6807dd712725f013281e7213"), patientName: "Ben Johnson", appointmentId: 63,
+    medication: "Ibuprofen", dosage: "400mg", doctorNotes: "Take 1 tablet every 8 hours.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7214"), patientName: "Ella Monroe", appointmentId: 64,
+    medication: "Vitamin C", dosage: "1000mg", doctorNotes: "Take 1 tablet daily.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7215"), patientName: "Lucas Turner", appointmentId: 65,
+    medication: "Aspirin", dosage: "300mg", doctorNotes: "Take 1 tablet after meals.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7216"), patientName: "Grace Scott", appointmentId: 66,
+    medication: "Paracetamol", dosage: "500mg", doctorNotes: "Take 1 tablet every 6 hours.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7217"), patientName: "Ethan Hill", appointmentId: 67,
+    medication: "Ibuprofen", dosage: "400mg", doctorNotes: "Take 1 tablet every 8 hours.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7218"), patientName: "Ruby Ward", appointmentId: 68,
+    medication: "Vitamin D", dosage: "1000 IU", doctorNotes: "Take 1 tablet daily with food.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7219"), patientName: "Jack Baker", appointmentId: 69,
+    medication: "Antibiotics", dosage: "500mg", doctorNotes: "Take 1 tablet every 12 hours.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7220"), patientName: "Mia Hall", appointmentId: 70,
+    medication: "Paracetamol", dosage: "500mg", doctorNotes: "Take 1 tablet every 6 hours.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7221"), patientName: "Owen Thomas", appointmentId: 71,
+    medication: "Ibuprofen", dosage: "200mg", doctorNotes: "Take 1 tablet every 8 hours.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7222"), patientName: "Ivy Jackson", appointmentId: 72,
+    medication: "Antihistamine", dosage: "10mg", doctorNotes: "Take 1 tablet every morning.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7223"), patientName: "Leo Martin", appointmentId: 73,
+    medication: "Vitamin C", dosage: "1000mg", doctorNotes: "Take 1 tablet daily.",
+    _class: "com.project.back_end.models.Prescription" },
+  { _id: ObjectId("6807dd712725f013281e7224"), patientName: "Ella Moore", appointmentId: 74,
+    medication: "Aspirin", dosage: "300mg", doctorNotes: "Take 1 tablet after meals.",
+    _class: "com.project.back_end.models.Prescription" }
 ]);
 
 db.prescriptions.createIndex({ appointmentId: 1 }, { unique: true });

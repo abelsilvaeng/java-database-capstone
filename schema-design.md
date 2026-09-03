@@ -20,10 +20,10 @@ itself should be the thing that guarantees it.
 | name     | VARCHAR(100) | NOT NULL, length 3–100            |
 | email    | VARCHAR(255) | NOT NULL, UNIQUE                  |
 | password | VARCHAR(255) | NOT NULL, minimum 6 characters    |
-| phone    | VARCHAR(10)  | NOT NULL, UNIQUE, exactly 10 digits |
+| phone    | VARCHAR(20)  | NOT NULL, UNIQUE, 10 digits or `888-111-1111` |
 | address  | VARCHAR(255) | NOT NULL                          |
 | date_of_birth | DATE | NULL, must be in the past (`@Past`) |
-| emergency_contact | VARCHAR(10) | NULL, exactly 10 digits when present |
+| emergency_contact | VARCHAR(20) | NULL, same format as phone when present |
 | insurance_provider | VARCHAR(100) | NULL |
 
 Email and phone are both unique because the signup flow rejects a patient whose email *or* phone
@@ -38,7 +38,7 @@ already exists. The password is never serialized back to the client.
 | specialty | VARCHAR(50)  | NOT NULL, length 3–50          |
 | email     | VARCHAR(255) | NOT NULL, UNIQUE               |
 | password  | VARCHAR(255) | NOT NULL, minimum 6 characters |
-| phone     | VARCHAR(10)  | NOT NULL, exactly 10 digits    |
+| phone     | VARCHAR(20)  | NOT NULL, 10 digits or `555-101-2020` |
 | years_of_experience | INT | NULL, 0-70 (`@Min`/`@Max`) |
 | clinic_address | VARCHAR(255) | NULL |
 | rating | DOUBLE | NULL, 0-5 (`@Min`/`@Max`) |

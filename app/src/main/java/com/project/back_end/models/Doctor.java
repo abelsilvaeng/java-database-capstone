@@ -40,7 +40,8 @@ public class Doctor {
     private String password;
 
     @NotNull(message = "phone cannot be null")
-    @Pattern(regexp = "^[0-9]{10}$", message = "phone number must be exactly 10 digits")
+    @Pattern(regexp = "^(\\d{10}|\\d{3}-\\d{3}-\\d{4})$",
+             message = "phone must be 10 digits, optionally grouped as 555-101-2020")
     private String phone;
 
     @ElementCollection

@@ -52,8 +52,7 @@ Two documents go into more detail:
 │   ├── insert-sample-data.sql        Sample admins, doctors, patients, appointments
 │   └── stored-procedures.sql         Reporting procedures
 ├── prescriptions/
-│   ├── prescriptions.json            Sample prescription documents
-│   └── load-prescriptions.js         mongosh seed script
+│   └── load-prescriptions.js         mongosh seed for 24 prescriptions
 ├── app/
 │   ├── Dockerfile                    Multi-stage build, non-root runtime (Module 5)
 │   ├── pom.xml
@@ -95,6 +94,8 @@ mysql -u root -p < SQL/stored-procedures.sql
 
 # 2. Prepare MongoDB
 mongosh "mongodb://localhost:27017/prescriptions" prescriptions/load-prescriptions.js
+# With an authenticated instance, add the credentials and authSource:
+#   mongosh "mongodb://root:<password>@<host>:27017/prescriptions?authSource=admin" #     prescriptions/load-prescriptions.js
 
 # 3. Run the app
 cd app
@@ -122,9 +123,12 @@ From `SQL/insert-sample-data.sql`:
 
 | Role | Identifier | Password |
 |------|-----------|----------|
-| Admin | `admin` | `admin123` |
-| Doctor | `alice.mendes@smartclinic.com` | `doctor123` |
-| Patient | `maria.silva@example.com` | `patient123` |
+| Admin | `admin` | `admin@1234` |
+| Doctor | `dr.adams@example.com` | `pass12345` |
+| Patient | `jane.doe@example.com` | `passJane1` |
+
+The seed loads 25 doctors with 100 availability slots, 25 patients, 130 appointments
+(50 scheduled, 80 completed), one admin, and 24 prescriptions in MongoDB.
 
 ## API
 

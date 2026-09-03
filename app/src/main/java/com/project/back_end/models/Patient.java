@@ -33,7 +33,8 @@ public class Patient {
     private String password;
 
     @NotNull(message = "phone cannot be null")
-    @Pattern(regexp = "^[0-9]{10}$", message = "phone number must be exactly 10 digits")
+    @Pattern(regexp = "^(\\d{10}|\\d{3}-\\d{3}-\\d{4})$",
+             message = "phone must be 10 digits, optionally grouped as 888-111-1111")
     private String phone;
 
     @NotNull(message = "address cannot be null")
@@ -45,7 +46,8 @@ public class Patient {
     @Past(message = "date of birth must be in the past")
     private LocalDate dateOfBirth;
 
-    @Pattern(regexp = "^[0-9]{10}$", message = "emergency contact must be exactly 10 digits")
+    @Pattern(regexp = "^(\\d{10}|\\d{3}-\\d{3}-\\d{4})$",
+             message = "emergency contact must be 10 digits, optionally grouped")
     private String emergencyContact;
 
     @Size(max = 100, message = "insurance provider cannot exceed 100 characters")

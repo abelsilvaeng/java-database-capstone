@@ -75,6 +75,21 @@ class ModelValidationTest {
     }
 
     @Test
+    void hyphenatedPhoneIsAccepted() {
+        // The seed data ships numbers in this shape, so the model has to accept it.
+        Doctor doctor = validDoctor();
+        doctor.setPhone("555-101-2020");
+        assertTrue(validator.validate(doctor).isEmpty());
+    }
+
+    @Test
+    void plainTenDigitPhoneIsStillAccepted() {
+        Doctor doctor = validDoctor();
+        doctor.setPhone("5551012020");
+        assertTrue(validator.validate(doctor).isEmpty());
+    }
+
+    @Test
     void futureDateOfBirthIsRejected() {
         Patient patient = validPatient();
         patient.setDateOfBirth(LocalDate.now().plusDays(1));
