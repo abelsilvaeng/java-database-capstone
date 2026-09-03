@@ -7,10 +7,14 @@ import { patientSignup, patientLogin } from "./services/patientServices.js";
 
 window.openModal = openModal;
 
+// Reaching this page means browsing as a patient. This runs at module load,
+// before the header renders, so a stale role left by an earlier admin or doctor
+// session cannot make the header think the session expired.
+if (localStorage.getItem("userRole") !== "loggedPatient") {
+  localStorage.setItem("userRole", "patient");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  if (!localStorage.getItem("userRole")) {
-    localStorage.setItem("userRole", "patient");
-  }
   loadDoctorCards();
 
   const searchBar = document.getElementById("searchBar");

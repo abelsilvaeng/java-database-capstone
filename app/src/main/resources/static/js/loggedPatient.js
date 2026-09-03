@@ -4,8 +4,11 @@ import { getDoctors, filterDoctors, getDoctorAvailability } from "./services/doc
 import { createDoctorCard } from "./components/doctorCard.js";
 import { bookAppointment } from "./services/appointmentRecordService.js";
 
+// Same reason as patientDashboard.js: set the role at module load, before the
+// header renders, so it never reads a role left over from another session.
+localStorage.setItem("userRole", "loggedPatient");
+
 document.addEventListener("DOMContentLoaded", () => {
-  localStorage.setItem("userRole", "loggedPatient");
   loadDoctorCards();
 
   const searchBar = document.getElementById("searchBar");
