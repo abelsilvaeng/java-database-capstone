@@ -93,8 +93,8 @@ function wireSubmit(type) {
 
   bind("adminLoginSubmit", "adminLoginHandler");
   bind("doctorLoginSubmit", "doctorLoginHandler");
-  bind("loginBtn", "patientLoginHandler");
-  bind("signupBtn", "patientSignupHandler");
+  bind("loginBtn", "loginPatient");
+  bind("signupBtn", "signupPatient");
   bind("saveDoctorBtn", "adminAddDoctor");
 }
 

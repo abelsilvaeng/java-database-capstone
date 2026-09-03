@@ -157,6 +157,7 @@ The seed loads 25 doctors with 100 availability slots, 25 patients, 130 appointm
 | POST | `/patient/login` | Patient login, returns a JWT |
 | GET | `/patient/{token}` | The logged-in patient's details |
 | GET | `/patient/{id}/{token}` | That patient's appointments |
+| GET | `/patient/{id}/{user}/{token}` | Same listing addressed by role, so one call serves both dashboards |
 | GET | `/patient/filter/{condition}/{name}/{token}` | Filter by `past`/`future` and doctor name |
 
 ### Appointments

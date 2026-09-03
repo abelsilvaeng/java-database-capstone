@@ -49,7 +49,7 @@ async function loadAppointments() {
 
   if (appointments.length === 0) {
     const row = document.createElement("tr");
-    row.innerHTML = `<td colspan="6" class="noPatientRecord">No appointments found for this date.</td>`;
+    row.innerHTML = `<td colspan="6" class="noPatientRecord">No Appointments found for today.</td>`;
     tableBody.appendChild(row);
     return;
   }

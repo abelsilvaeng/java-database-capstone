@@ -75,6 +75,17 @@ public class PatientController {
         return patientService.getPatientAppointment(id, token);
     }
 
+    /** Same listing addressed by role, so one frontend call serves both dashboards. */
+    @GetMapping("/{id}/{user}/{token}")
+    public ResponseEntity<Map<String, Object>> getPatientAppointmentByUser(@PathVariable Long id,
+                                                                           @PathVariable String user,
+                                                                           @PathVariable String token) {
+        if (tokenInvalid(service.validateToken(token, user))) {
+            return unauthorized();
+        }
+        return patientService.getPatientAppointment(id, token, user);
+    }
+
     @GetMapping("/filter/{condition}/{name}/{token}")
     public ResponseEntity<Map<String, Object>> filterPatientAppointment(@PathVariable String condition,
                                                                         @PathVariable String name,

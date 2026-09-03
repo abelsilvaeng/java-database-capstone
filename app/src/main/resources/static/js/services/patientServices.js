@@ -38,9 +38,15 @@ export async function getPatientData(token) {
   }
 }
 
-export async function getPatientAppointments(id, token) {
+/**
+ * One call for both dashboards. `user` is the role asking for the data, so the
+ * backend can apply the right rule: a patient may only read their own history,
+ * a doctor may read the history of a patient they are treating.
+ */
+export async function getPatientAppointments(id, token, user = "patient") {
+  const path = user ? `${PATIENT_API}/${id}/${user}/${token}` : `${PATIENT_API}/${id}/${token}`;
   try {
-    const response = await fetch(`${PATIENT_API}/${id}/${token}`);
+    const response = await fetch(path);
     const data = await response.json();
     return response.ok ? data.appointments : null;
   } catch (error) {

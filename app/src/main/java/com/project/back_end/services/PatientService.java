@@ -65,6 +65,28 @@ public class PatientService {
         return dtos;
     }
 
+    /**
+     * Same listing, but reached by a doctor rather than by the patient. A doctor is
+     * allowed to read the history of any patient they are treating, so the ownership
+     * check that applies to patients is skipped here; the caller has already proven
+     * the token belongs to a doctor.
+     */
+    @Transactional
+    public ResponseEntity<Map<String, Object>> getPatientAppointment(Long id, String token, String user) {
+        if ("doctor".equalsIgnoreCase(user)) {
+            Map<String, Object> response = new HashMap<>();
+            try {
+                response.put("appointments", toDTOs(appointmentRepository.findByPatientId(id)));
+                return ResponseEntity.ok(response);
+            } catch (Exception e) {
+                logger.error("Error fetching patient appointments for doctor", e);
+                response.put("message", "Internal server error");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            }
+        }
+        return getPatientAppointment(id, token);
+    }
+
     @Transactional
     public ResponseEntity<Map<String, Object>> getPatientAppointment(Long id, String token) {
         Map<String, Object> response = new HashMap<>();

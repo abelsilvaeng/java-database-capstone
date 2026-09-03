@@ -52,7 +52,7 @@ async function filterDoctorsOnChange() {
   renderDoctorCards(result.doctors || []);
 }
 
-window.patientSignupHandler = async function () {
+window.signupPatient = async function () {
   const data = {
     name: document.getElementById("name").value.trim(),
     email: document.getElementById("email").value.trim(),
@@ -69,7 +69,7 @@ window.patientSignupHandler = async function () {
   }
 };
 
-window.patientLoginHandler = async function () {
+window.loginPatient = async function () {
   const data = {
     email: document.getElementById("email").value.trim(),
     password: document.getElementById("password").value
