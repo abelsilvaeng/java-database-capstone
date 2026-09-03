@@ -26,7 +26,7 @@ db.prescriptions.insertMany([
     patientName: "Joao Pereira",
     appointmentId: NumberLong(2),
     medication: "Hydrocortisone cream",
-    dosage: "1%",
+    dosage: "1% cream",
     doctorNotes: "Apply a thin layer twice a day for 10 days. Stop if irritation appears.",
     refillCount: 0,
     tags: ["dermatology", "topical"]

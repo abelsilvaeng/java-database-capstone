@@ -135,3 +135,6 @@ app/target/
 .vscode/
 .idea/
 *.iml
+
+# Theia Cloud IDE settings
+.theia/

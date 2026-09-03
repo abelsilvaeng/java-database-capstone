@@ -23,6 +23,7 @@ public class Prescription {
     private String medication;
 
     @NotNull(message = "dosage cannot be null")
+    @Size(min = 3, max = 20, message = "dosage must be between 3 and 20 characters")
     private String dosage;
 
     @Size(max = 200, message = "doctor notes cannot exceed 200 characters")
