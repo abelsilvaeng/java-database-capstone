@@ -72,3 +72,45 @@ INSERT INTO appointment (doctor_id, patient_id, appointment_time, status) VALUES
 (5, 6, TIMESTAMP(DATE_ADD(CURDATE(), INTERVAL 7 DAY),  '15:00:00'), 0),
 (6, 4, TIMESTAMP(DATE_ADD(CURDATE(), INTERVAL 9 DAY),  '16:00:00'), 0),
 (6, 1, TIMESTAMP(DATE_ADD(CURDATE(), INTERVAL 12 DAY), '17:00:00'), 0);
+
+-- ---------------------------------------------------------------------
+-- Optional profile details
+-- These columns are nullable, so the inserts above stay valid on their own.
+-- Filling them here keeps the sample data realistic without making any of
+-- the fields mandatory.
+-- ---------------------------------------------------------------------
+
+UPDATE doctor SET years_of_experience = 18, rating = 4.8,
+    clinic_address = 'Suite 210, 1200 Health Plaza' WHERE id = 1;
+UPDATE doctor SET years_of_experience = 9,  rating = 4.5,
+    clinic_address = 'Suite 105, 1200 Health Plaza' WHERE id = 2;
+UPDATE doctor SET years_of_experience = 22, rating = 4.9,
+    clinic_address = 'Suite 310, 1200 Health Plaza' WHERE id = 3;
+UPDATE doctor SET years_of_experience = 6,  rating = 4.2,
+    clinic_address = 'Suite 402, 1200 Health Plaza' WHERE id = 4;
+UPDATE doctor SET years_of_experience = 14, rating = 4.7,
+    clinic_address = 'Suite 118, 1200 Health Plaza' WHERE id = 5;
+UPDATE doctor SET years_of_experience = 3,  rating = 4.1,
+    clinic_address = 'Suite 220, 1200 Health Plaza' WHERE id = 6;
+
+UPDATE patient SET date_of_birth = '1988-03-14', emergency_contact = '5559000001',
+    insurance_provider = 'Unimed' WHERE id = 1;
+UPDATE patient SET date_of_birth = '1975-11-02', emergency_contact = '5559000002',
+    insurance_provider = 'Bradesco Saude' WHERE id = 2;
+UPDATE patient SET date_of_birth = '2016-07-21', emergency_contact = '5559000003',
+    insurance_provider = 'Amil' WHERE id = 3;
+UPDATE patient SET date_of_birth = '1992-01-09', emergency_contact = '5559000004',
+    insurance_provider = 'Unimed' WHERE id = 4;
+UPDATE patient SET date_of_birth = '1969-05-30', emergency_contact = '5559000005',
+    insurance_provider = 'SulAmerica' WHERE id = 5;
+UPDATE patient SET date_of_birth = '2001-09-17', emergency_contact = '5559000006',
+    insurance_provider = 'Hapvida' WHERE id = 6;
+
+UPDATE appointment SET reason_for_visit = 'Routine blood pressure review',
+    notes = 'Patient reports occasional dizziness in the morning.' WHERE id = 1;
+UPDATE appointment SET reason_for_visit = 'Persistent skin rash on forearm' WHERE id = 2;
+UPDATE appointment SET reason_for_visit = 'Recurring sore throat',
+    notes = 'Third episode this year. Consider referral if it repeats.' WHERE id = 3;
+UPDATE appointment SET reason_for_visit = 'Follow-up on medication change' WHERE id = 4;
+UPDATE appointment SET reason_for_visit = 'Frequent migraines' WHERE id = 5;
+UPDATE appointment SET reason_for_visit = 'Knee pain after running' WHERE id = 6;

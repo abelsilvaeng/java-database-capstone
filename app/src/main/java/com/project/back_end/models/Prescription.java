@@ -1,5 +1,7 @@
 package com.project.back_end.models;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.Id;
@@ -28,6 +30,16 @@ public class Prescription {
 
     @Size(max = 200, message = "doctor notes cannot exceed 200 characters")
     private String doctorNotes;
+
+    // Optional metadata. MongoDB stores documents without these fields just fine,
+    // which is exactly why prescriptions live here rather than in MySQL.
+
+    @Min(value = 0, message = "refill count cannot be negative")
+    @Max(value = 12, message = "refill count cannot exceed 12")
+    private Integer refillCount;
+
+    @Size(max = 100, message = "pharmacy name cannot exceed 100 characters")
+    private String pharmacyName;
 
     public Prescription() {
     }
@@ -86,5 +98,21 @@ public class Prescription {
 
     public void setDoctorNotes(String doctorNotes) {
         this.doctorNotes = doctorNotes;
+    }
+
+    public Integer getRefillCount() {
+        return refillCount;
+    }
+
+    public void setRefillCount(Integer refillCount) {
+        this.refillCount = refillCount;
+    }
+
+    public String getPharmacyName() {
+        return pharmacyName;
+    }
+
+    public void setPharmacyName(String pharmacyName) {
+        this.pharmacyName = pharmacyName;
     }
 }

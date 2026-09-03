@@ -1,5 +1,6 @@
 package com.project.back_end.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -39,6 +41,16 @@ public class Appointment {
 
     @NotNull(message = "status cannot be null")
     private int status;
+
+    // Optional clinical context. Left nullable so existing appointments stay valid.
+
+    @Size(max = 200, message = "reason for visit cannot exceed 200 characters")
+    private String reasonForVisit;
+
+    // Internal clinical notes: persisted, but never serialized into an API response.
+    @JsonIgnore
+    @Size(max = 500, message = "notes cannot exceed 500 characters")
+    private String notes;
 
     public Appointment() {
     }
@@ -103,5 +115,21 @@ public class Appointment {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getReasonForVisit() {
+        return reasonForVisit;
+    }
+
+    public void setReasonForVisit(String reasonForVisit) {
+        this.reasonForVisit = reasonForVisit;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

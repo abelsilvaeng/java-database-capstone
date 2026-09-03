@@ -22,6 +22,9 @@ itself should be the thing that guarantees it.
 | password | VARCHAR(255) | NOT NULL, minimum 6 characters    |
 | phone    | VARCHAR(10)  | NOT NULL, UNIQUE, exactly 10 digits |
 | address  | VARCHAR(255) | NOT NULL                          |
+| date_of_birth | DATE | NULL, must be in the past (`@Past`) |
+| emergency_contact | VARCHAR(10) | NULL, exactly 10 digits when present |
+| insurance_provider | VARCHAR(100) | NULL |
 
 Email and phone are both unique because the signup flow rejects a patient whose email *or* phone
 already exists. The password is never serialized back to the client.
@@ -36,6 +39,9 @@ already exists. The password is never serialized back to the client.
 | email     | VARCHAR(255) | NOT NULL, UNIQUE               |
 | password  | VARCHAR(255) | NOT NULL, minimum 6 characters |
 | phone     | VARCHAR(10)  | NOT NULL, exactly 10 digits    |
+| years_of_experience | INT | NULL, 0-70 (`@Min`/`@Max`) |
+| clinic_address | VARCHAR(255) | NULL |
+| rating | DOUBLE | NULL, 0-5 (`@Min`/`@Max`) |
 
 ### Table: doctor_available_times
 
@@ -59,6 +65,8 @@ Deleting a doctor deletes their slots, since a slot has no meaning on its own.
 | patient_id       | BIGINT   | NOT NULL, FOREIGN KEY → patient(id)  |
 | appointment_time | DATETIME | NOT NULL, must be in the future       |
 | status           | INT      | NOT NULL — 0 = scheduled, 1 = completed |
+| reason_for_visit | VARCHAR(200) | NULL |
+| notes            | VARCHAR(500) | NULL, hidden from API responses via `@JsonIgnore` |
 
 An appointment is treated as one hour long; the end time is derived as `appointment_time + 1
 hour` rather than stored, so the two values can never disagree.
@@ -91,6 +99,12 @@ not to delete them from under the prescriptions that reference them.
 
 Admins log in by username rather than email, which is why the JWT subject for an admin holds the
 username while for doctors and patients it holds the email.
+
+**On optional fields.** Every column added beyond the original core is nullable. That is a
+deliberate choice: a doctor registered before `rating` existed is still a valid row, and the
+signup and booking flows never have to ask for information the clinic does not yet have. The
+validation annotations on these fields (`@Min`, `@Max`, `@Past`, `@Pattern`, `@Size`) only fire
+when a value is actually supplied.
 
 ## MongoDB Collection Design
 

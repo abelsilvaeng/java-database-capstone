@@ -19,6 +19,7 @@ db.prescriptions.insertMany([
     dosage: "50mg",
     doctorNotes: "One tablet each morning. Return in 30 days for a blood pressure check.",
     refillCount: 2,
+    pharmacyName: "Downtown Pharmacy",
     pharmacy: { name: "Downtown Pharmacy", location: "742 Evergreen Ave" },
     tags: ["cardiology", "oral"]
   },
@@ -38,6 +39,7 @@ db.prescriptions.insertMany([
     dosage: "250mg/5ml suspension",
     doctorNotes: "5ml every 8 hours for 7 days. Complete the full course.",
     refillCount: 0,
+    pharmacyName: "Riverside Drugstore",
     pharmacy: { name: "Riverside Drugstore", location: "88 Maple Street" },
     tags: ["pediatrics", "antibiotic"]
   },

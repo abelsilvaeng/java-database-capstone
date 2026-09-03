@@ -37,6 +37,10 @@ CREATE TABLE patient (
     password VARCHAR(255) NOT NULL,
     phone    VARCHAR(10)  NOT NULL,
     address  VARCHAR(255) NOT NULL,
+    -- Optional profile details, nullable by design.
+    date_of_birth      DATE         NULL,
+    emergency_contact  VARCHAR(10)  NULL,
+    insurance_provider VARCHAR(100) NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uq_patient_email (email),
     UNIQUE KEY uq_patient_phone (phone)
@@ -52,6 +56,10 @@ CREATE TABLE doctor (
     email     VARCHAR(255) NOT NULL,
     password  VARCHAR(255) NOT NULL,
     phone     VARCHAR(10)  NOT NULL,
+    -- Optional profile details, nullable by design.
+    years_of_experience INT          NULL,
+    clinic_address      VARCHAR(255) NULL,
+    rating              DOUBLE       NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uq_doctor_email (email)
 ) ENGINE=InnoDB;
@@ -79,6 +87,9 @@ CREATE TABLE appointment (
     patient_id       BIGINT   NOT NULL,
     appointment_time DATETIME NOT NULL,
     status           INT      NOT NULL DEFAULT 0,
+    -- Optional clinical context, nullable by design.
+    reason_for_visit VARCHAR(200) NULL,
+    notes            VARCHAR(500) NULL,
     PRIMARY KEY (id),
     KEY idx_appointment_doctor (doctor_id),
     KEY idx_appointment_patient (patient_id),

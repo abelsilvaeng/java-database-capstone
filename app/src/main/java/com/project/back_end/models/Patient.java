@@ -7,8 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
 
 @Entity
 public class Patient {
@@ -37,6 +39,17 @@ public class Patient {
     @NotNull(message = "address cannot be null")
     @Size(max = 255, message = "address cannot exceed 255 characters")
     private String address;
+
+    // Optional profile details. Left nullable so existing patients stay valid.
+
+    @Past(message = "date of birth must be in the past")
+    private LocalDate dateOfBirth;
+
+    @Pattern(regexp = "^[0-9]{10}$", message = "emergency contact must be exactly 10 digits")
+    private String emergencyContact;
+
+    @Size(max = 100, message = "insurance provider cannot exceed 100 characters")
+    private String insuranceProvider;
 
     public Patient() {
     }
@@ -95,5 +108,29 @@ public class Patient {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getEmergencyContact() {
+        return emergencyContact;
+    }
+
+    public void setEmergencyContact(String emergencyContact) {
+        this.emergencyContact = emergencyContact;
+    }
+
+    public String getInsuranceProvider() {
+        return insuranceProvider;
+    }
+
+    public void setInsuranceProvider(String insuranceProvider) {
+        this.insuranceProvider = insuranceProvider;
     }
 }
