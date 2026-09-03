@@ -189,11 +189,14 @@ deleted user stops working immediately.
 ## Reporting
 
 ```sql
-CALL GetDailyAppointmentReportByDoctor('2026-09-10');
-CALL GetDoctorWithMostPatientsByMonth(9, 2026);
-CALL GetDoctorWithMostPatientsByYear(2026);
-CALL get_monthly_appointment_report_by_doctor(2026);   -- NULL for every year
+CALL GetDailyAppointmentReportByDoctor('2025-04-15');
+CALL GetDoctorWithMostPatientsByMonth(4, 2025);
+CALL GetDoctorWithMostPatientsByYear(2025);
+CALL get_monthly_appointment_report_by_doctor(2025);   -- NULL for every year
 ```
+
+The first three match the definitions given by the course lab; the fourth is an
+extra report backing the admin user story about monthly appointment volume.
 
 ## Tests and CI
 
