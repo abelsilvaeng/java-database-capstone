@@ -73,6 +73,14 @@ the doctor's remaining available slots, which is what prevents two patients from
 hour. Availability is computed as *published slots minus booked slots* on every request, so it
 cannot drift out of sync with the appointment table.
 
+**On retention.** A patient's past appointments are kept indefinitely rather than purged on a
+schedule. A completed appointment is the anchor for the prescription written at that visit, and a
+clinic has to be able to answer "what was this person treated for, and when" years later. Deleting
+old rows would silently orphan prescription documents in MongoDB, which hold only the
+`appointmentId` and no copy of the clinical context. If a retention policy is ever required by
+regulation, the right move is to archive completed appointments to a separate table or export,
+not to delete them from under the prescriptions that reference them.
+
 ### Table: admin
 
 | Column   | Type         | Constraints                 |
