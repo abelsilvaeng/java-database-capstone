@@ -36,3 +36,6 @@ function renderFooter() {
 }
 
 window.renderFooter = renderFooter;
+
+// Render on load as well, so a page that does not call renderContent() still gets a footer.
+renderFooter();

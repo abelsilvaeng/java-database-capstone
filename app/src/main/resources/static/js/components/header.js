@@ -15,8 +15,8 @@ function renderHeader() {
   const role = localStorage.getItem("userRole");
   const token = localStorage.getItem("token");
 
-  // A dashboard role without a token means the session expired or was tampered with.
-  if ((role === "admin" || role === "doctor") && !token) {
+  // A signed-in role without a token means the session expired or was tampered with.
+  if ((role === "loggedPatient" || role === "admin" || role === "doctor") && !token) {
     localStorage.removeItem("userRole");
     alert("Session expired or invalid login. Please log in again.");
     window.location.href = "/";
